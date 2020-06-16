@@ -3,9 +3,14 @@ Easy ajax helper for jquery
 
 # dependency
 -jQuery
+
 -bootstrap
+
 -boootstrap-validator
+
 -toastr
+
+-sweetalert
 
 # form markup
 
@@ -15,6 +20,9 @@ Easy ajax helper for jquery
 
 <!-- if you want to use validation-->
 <form action="" class="ajax needs-validation" novalidation="true">
+
+<!-- if you want to force ignore validation-->
+<form action="" class="ajax ignore_validation">
 ```
 
 # href markup
@@ -86,3 +94,8 @@ trigger form reset
 "reset":"true"
 }
 ```
+
+
+### Whats New V 1.1
+Replaces old javascript alert with sweelt alert
+[![N|Solid](https://abtanjir.com/examples/swal.png)]
