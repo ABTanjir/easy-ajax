@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta http-equiv="Content-Language" content="en">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Easy Ajax Demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, shrink-to-fit=no" />
+        <meta name="description" content="-----------------------------------------------------">
+        <meta name="msapplication-tap-highlight" content="no">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/a11y-dark.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div id="app">
+            <div class="app-container">
+                <div class="app-main">
+                    <div class="app-main__outer">
+                        <div class="app-content mx-5 my-5"> 
+                            <h1>
+                                <a href="https://github.com/abtanjir/easy-ajax">Show Full Documentation</a>
+                            </h1>
+                            
+                            
+
+                            <h1>Link Actions</h1>
+                            <hr>
+                            <h4>Ajax Link Click</h4>
+                            <ul>
+                                <li>
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?status=success">Success Link Click</a>
+                                </li>                                
+                                <li>
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?status=error">Error Link Click</a>
+                                </li>
+                                <li>
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?status=warning">Warning Link Click</a>
+                                </li>
+                                <li>
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?status=info">Info Link Click</a>
+                                </li>
+<pre>
+    <code class="json">
+// respon example
+{
+    "status":"success", //success, error, warning, info
+    "message":"Link clicked successfully!"
+}
+    </code>
+</pre>
+                            </ul>
+                            
+                            <h4>Ajax Response After Confirmations </h4>
+                            <ul>
+                                <li>
+                                    <a class="ajax" data-confirm="Are you sure?" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?status=success">Link With Confirm</a>
+                                </li>
+                            </ul>
+
+                            <h4>Ajax Response Delete The Row</h4>
+                            <ol>
+                                <li class="line">
+                                    <a class="ajax" data-confirm="Are you sure?" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?remove">Link With Confirm</a>
+                                </li>
+                                <li class="line">
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?remove">Link Without Confirm</a>
+                                </li>
+                            </ol>
+<pre>
+    <code class="json">
+{
+    "status":"success",
+    "message":"Line removed successfully!",
+    "remove":".line" // dom to remove
+}
+    </code>
+</pre>
+
+                            <h4>Ajax Dynamic Render Demo</h4>
+                            <ol>
+                                <li class="line">
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?render_to">Get Dynamic Data</a>
+                                </li>
+
+                                <li class="line">
+                                    <a class="ajax" data-confirm="Are you sure?" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?render_to_confirm">Get Dynamic Data With Confirm</a>
+                                </li>
+
+                                <li class="line">
+                                    <a class="ajax" data-confirm="Are you sure?" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?clear">Clear After Ajax</a>
+                                </li>
+                                
+                                <div id="info1">
+                                    (dynamic data will load here)
+                                </div>
+                            </ol>
+
+<pre>
+    <code class="json">
+{
+    "status":"success",
+    "message":"Captain cat said meaw!",
+    "html":"Meaw Captain Cat!", //html data
+    "render_to":"#info1" //load html to
+}
+    </code>
+</pre>
+                            <h4>Refresh Page After Ajax Submittion</h4>
+                            <ol>
+                                <li class="line">
+                                    <a class="ajax" href="https://abtanjir.com/demo/easyajax/example/responses/index.php?refresh">Reload After Ajax</a>
+                                </li>
+                            </ol>
+                            
+                            <div class="mt-5">
+                                <h1>Form Actions</h1>
+                                <hr>
+                                <div class="col-md-10">
+                                    
+                                    <h4>Form Submit Without Validation</h4>
+                                    <div class="row">
+                                        <form method="post" class="ajax"  action="https://abtanjir.com/demo/easyajax/example/responses/index.php?post"> 
+                                            <input class="form-control" placeholder="Your Name" type="text" >
+                                            <input type="submit" value="Submit">
+                                        </form>
+                                    </div>
+                                    
+                                    <h4>Form Submit With Validation</h4>
+                                    <div class="row">
+                                        <form method="post" class="ajax needs-validation" novalidate="true"  action="https://abtanjir.com/demo/easyajax/example/responses/index.php?post"> 
+                                            <input class="form-control" placeholder="Your Name" type="text" name="name" required>
+                                            <input type="submit" value="Submit">
+                                        </form>
+                                    </div>
+
+                                    <h4>Form Submit Render Data</h4>
+                                    <div class="row">
+                                        <form method="post" class="ajax needs-validation" novalidate="true"  action="https://abtanjir.com/demo/easyajax/example/responses/index.php?post_render"> 
+                                            <input class="form-control" placeholder="Your Name" type="text" name="post_render" required>
+                                            <input type="submit" value="Submit">
+                                        </form>
+                                        <div id="info2">...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    
+    <!-- good to have but not required-->>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/8.11.8/sweetalert2.min.js"></script>
+    <!-- good to have but not required-->>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+    
+    <script type="text/javascript" src="../easyajax.js"></script>
+    
+    <script>
+        $(document).ready(() => {
+            $('.ajax').easyajax({
+                after_render: function(elem, data){
+                    // code
+                },
+                before_ajax: function(elem){
+                    console.log('before');
+                },
+                after_ajax: function(elem, data){
+                    console.log('after');
+                },
+                error_ajax: function(elem, xhr){
+                    console.log(xhr);
+                },
+                /**
+                 * if you don't have toastr integrated handle notification by your self;
+                 * @elem reffers to the clicked element / submitted form
+                 * @data reffers to ajax response
+                */
+                // notification: function(elem, data){
+                //     //don't have toastr or manage response yourself
+                //     alert(data.message);
+                // }
+            });
+        });
+
+        //init highlisht js
+        $('code').each(function() {
+        var that = $(this);
+        // cache the content of 'code'
+        var html = that.html().trim();
+        that.empty();
+        // escape the content
+        that.text(html);
+        });
+        hljs.initHighlightingOnLoad();
+    </script>
+    
+
+</html>
