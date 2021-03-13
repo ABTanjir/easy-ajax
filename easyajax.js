@@ -19,6 +19,7 @@
             var self = this;
             self.elem = elem;
             self.$elem = $( elem );
+
             self.options = $.extend( {}, $.fn.easyajax.options, options );
             // self.toolbar = $('<div class="tool-container gradient" />').addClass('tool-'+self.options.position);
             self.setTrigger();
@@ -36,14 +37,14 @@
                         if (self.elem.checkValidity() === false) {
                             e.preventDefault();
                             e.stopPropagation();
-                            
+
                             isValidated = false;
                         }else{
                             isValidated = true;
                         }
                         self.elem.classList.add('was-validated');
                     }
-                    
+
                     $('.form-control').each(function(i, obj) {
                         if($(obj).parent().find('.invalid-feedback').length){
                             $(obj).parent().find('.invalid-feedback').text(obj.validationMessage);
@@ -51,7 +52,7 @@
                             $(obj).parent().append('<em id="'+$(obj).attr('name')+'-error" class="error invalid-feedback">'+obj.validationMessage+'</em>');
                         }
                     });
-                    
+
                     if(isValidated === false) return false;
 
                     if(self.$elem.data('confirm')){
@@ -70,7 +71,7 @@
                     if(e.target.tagName.toLowerCase() === 'a'){
                         if(self.$elem.data('confirm')){
                             self.sweetConfirm(self.$elem.data('confirm'), 'Click ok if you want to proceed', function(confirm){
-                                
+
                                 if(confirm){
                                     self.getRequest();
                                 }
@@ -96,7 +97,7 @@
             if(data.status != 'success'){
                 self.$elem.find(":submit").prop('disabled', false);
             }else{
-                if (typeof self.$elem.closest('.modal').modal === 'function') { 
+                if (typeof self.$elem.closest('.modal').modal === 'function') {
                     self.$elem.closest('.modal').modal("hide");
                 }
             }
@@ -124,7 +125,7 @@
                 }
             }
         },
-        
+
         rerender: function(data){
             var self = this;
             var current_url = window.location.href;
@@ -138,7 +139,7 @@
                         data.rerender = '.app-content';
                     }
                     $(data.rerender).html($(data).find(data.rerender).html()).trigger('change');
-                    
+
                     if(data.scriptReload != false){
                         var reloadable = $('#reloadable').html();
                         $('#reloadable').html('').html(reloadable);
@@ -167,7 +168,7 @@
                 }
             });
         },
-        
+
         isJson: function(str){
             return typeof str == 'object';
         },
@@ -208,7 +209,7 @@
                     if(data.render_to){
                         self.render_to(data);
                     }
-                    
+
                     if(data.rerender){
                         self.rerender(data);
                     }
@@ -216,15 +217,15 @@
                     if(data.remove){
                         self.remove(data);
                     }
-                    
+
                     if(data.empty){
                         $(data.empty).html('');
                     }
-                    
+
                     if(data.reset){
                         $(_self).trigger('reset');
                     }
-                    
+
                     if(data.refresh){
                         setTimeout(function(){
                             window.location.reload(1);
@@ -238,13 +239,17 @@
 
         postRequest: function(e){
             var self = this;
-            
-            self.$elem.find(":submit").prop('disabled', true);
+            var btn_submit = self.$elem.find(":submit");
+            var stn_submit_content = btn_submit.html() //store content of submit button
+            btn_submit.prop('disabled', true);
             //enable submit button after 15 sec
-            setTimeout(function(){
-                self.$elem.find(":submit").prop('disabled', false);
-            }, 5000);
-            
+            if(self.options.autoEnable){
+                setTimeout(function(){
+                    btn_submit.html(stn_submit_content)
+                    btn_submit.prop('disabled', false);
+                }, self.options.autoEnable);
+            }
+
             var action = self.$elem.attr('action');
             var method = self.$elem.attr('method');
             var formData = new FormData(self.elem);
@@ -258,7 +263,7 @@
                 data: formData, // serializes the form's elements.
                 success: function(data){
                     self.options.after_ajax(self.$elem, data);
-                    
+
                     if(!self.isJson(data)){
                         data = JSON.parse(data)
                     }
@@ -270,7 +275,7 @@
                     if(data.render_to){
                         self.render_to(data);
                     }
-                    
+
                     if(data.rerender){
                         self.rerender(data);
                     }
@@ -278,11 +283,11 @@
                     if(data.remove){
                         self.remove(data);
                     }
-                    
+
                     if(data.empty){
                         $(data.empty).html('');
                     }
-                    
+
                     if(data.reset){
                         $(".select2").val("");
                         $(".select2").trigger("change");
@@ -290,7 +295,7 @@
                         $(".select2-tag").trigger("change");
                         $(_self).trigger('reset')
                     }
-                    
+
                     if(data.refresh){
                         setTimeout(function(){
                             window.location.reload(1);
@@ -298,7 +303,7 @@
                     }
                 },
                 error: function(xhr){
-                    self.options.error_ajax(self.$elem, xhr);                    
+                    self.options.error_ajax(self.$elem, xhr);
                 }
             });
         }
@@ -313,8 +318,9 @@
     };
 
     $.fn.easyajax.options = {
-        after_render: function(el, data){},
+        autoEnable: 5000,
         notification: null,
+        after_render: function(el, data){},
         before_ajax: function(el, data){},
         after_ajax: function(el, data){},
         error_ajax: function(el, data){},

@@ -34,6 +34,7 @@ Select dom and initiate easyajax
 # easyajax callback functions
 ```js
 $('.ajax').easyajax({
+    autoEnable: "[false || time in mili second]",
     after_render: function(elem, data){
         // code
     },
