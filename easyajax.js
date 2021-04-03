@@ -16,10 +16,11 @@
     "use strict"
     var EasyAjax = {
         init: function( options, elem ) {
-            var self = this;
+            console.log('initializez...');
+            self = this;
             self.elem = elem;
             self.$elem = $( elem );
-
+            self.$elem.content = self.$elem.find(":submit").html();
             self.options = $.extend( {}, $.fn.easyajax.options, options );
             // self.toolbar = $('<div class="tool-container gradient" />').addClass('tool-'+self.options.position);
             self.setTrigger();
@@ -27,7 +28,7 @@
 
         setTrigger: function() {
             var self = this;
-
+            console.log('trigger set....');
             if(self.$elem.prop("tagName").toLowerCase() == 'form'){
                 self.$elem.on('submit', function(e) {
                     e.preventDefault();
@@ -37,15 +38,18 @@
                         if (self.elem.checkValidity() === false) {
                             e.preventDefault();
                             e.stopPropagation();
-
                             isValidated = false;
                         }else{
                             isValidated = true;
                         }
-                        self.elem.classList.add('was-validated');
-                    }
 
-                    $('.form-control').each(function(i, obj) {
+                        if(!self.$elem.hasClass('was-validated')){
+                            self.realTimeValidate();
+                        }
+                        self.elem.classList.add('was-validated')
+                    }
+                    // self.$elem.remove();
+                    self.$elem.find('.form-control').each(function(i, obj) {
                         if($(obj).parent().find('.invalid-feedback').length){
                             $(obj).parent().find('.invalid-feedback').text(obj.validationMessage);
                         }else{
@@ -66,6 +70,7 @@
                     }
                 });
             }else{
+                // on [.ajax] link click
                 self.$elem.on('click', function(e) {
                     e.preventDefault();
                     if(e.target.tagName.toLowerCase() === 'a'){
@@ -83,6 +88,27 @@
                 });
             }
 
+        },
+
+        realTimeValidate: function(){
+            var self = this;
+            console.log('Realtime validation started...')
+            self.$elem.on('input', function(e) {
+                e.preventDefault();
+
+                console.log('validationg...')
+                $(this).closest('form').find('.form-control').each(function(i, obj) {
+                    if(e.target.validationMessage.length == 0){
+                        $(e.target).removeClass('is-invalid');
+                        return true;
+                    }
+                    if($(obj).parent().find('.invalid-feedback').length){
+                        $(obj).parent().find('.invalid-feedback').text(obj.validationMessage);
+                    }else{
+                        $(obj).parent().append('<em id="'+$(obj).attr('name')+'-error" class="error invalid-feedback">'+obj.validationMessage+'</em>');
+                    }
+                });
+            });
         },
 
         // actions
@@ -135,7 +161,6 @@
                 success: function(data) {
                     var data = $.parseHTML(data);
                     if(!$(data).find(data.rerender)){
-                        console.log('Error: '+data.rerender+' not found!');
                         data.rerender = '.app-content';
                     }
                     $(data.rerender).html($(data).find(data.rerender).html()).trigger('change');
@@ -150,7 +175,6 @@
 
         remove: function(data){
             var self = this;
-            console.log('removed');
             self.$elem.closest(data.remove).css({"background":'#b2bec3', 'transition': 'linear background .3s'}).delay(300).queue(function(){
                 $(this).remove();
             });
@@ -240,12 +264,12 @@
         postRequest: function(e){
             var self = this;
             var btn_submit = self.$elem.find(":submit");
-            var stn_submit_content = btn_submit.html() //store content of submit button
+            // var stn_submit_content = btn_submit.html() //store content of submit button
             btn_submit.prop('disabled', true);
-            //enable submit button after 15 sec
+            //enable submit button after certain second
             if(self.options.autoEnable){
                 setTimeout(function(){
-                    btn_submit.html(stn_submit_content)
+                    btn_submit.html(self.$elem.content)
                     btn_submit.prop('disabled', false);
                 }, self.options.autoEnable);
             }
@@ -304,6 +328,10 @@
                 },
                 error: function(xhr){
                     self.options.error_ajax(self.$elem, xhr);
+
+                    //enable submit form
+                    btn_submit.html(self.$elem.content)
+                    btn_submit.prop('disabled', false);
                 }
             });
         }
